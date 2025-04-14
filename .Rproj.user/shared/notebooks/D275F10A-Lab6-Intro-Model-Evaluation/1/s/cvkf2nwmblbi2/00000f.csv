@@ -1,5 +1,0 @@
-"0","# NOTE: You might first need to install the ISLR package"
-"0","library(ISLR)"
-"0","data(Auto)"
-"0",""
-"0","cars <- Auto %>% select(mpg, horsepower, year)"

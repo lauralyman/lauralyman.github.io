@@ -1,4 +1,0 @@
-"0","# Raw data"
-"0","cars_plot <- ggplot(cars, aes(x = horsepower, y = mpg)) + geom_point()"
-"0",""
-"0","cars_plot"
