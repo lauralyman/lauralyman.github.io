@@ -2,7 +2,9 @@
 title: "About"
 ---
 
-This is my website! I am a professor at Mount Holyoke College in the Math & Stats Department.
+This is my website! I am a professor at Mount Holyoke College in the Math & Stats Department. 
+
+This website is for STAT 244. 
 
 ```{r}
 1 + 1
