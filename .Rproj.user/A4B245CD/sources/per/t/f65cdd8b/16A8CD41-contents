@@ -1,0 +1,129 @@
+---
+title: "Lab 3: Linear Regression with Binary Outcome"
+author: "STAT 244"
+format: live-html
+engine: knitr
+    
+    # pdf:
+    #   keep-tex: true
+    #   include-in-header: 
+    #      text: |
+    #        \usepackage{fvextra}
+    #        \DefineVerbatimEnvironment{Highlighting}{Verbatim}{breaklines,commandchars=\\\{\}}
+    #         \DefineVerbatimEnvironment{OutputCode}{Verbatim}{breaklines,commandchars=\\\{\}}
+    # html: 
+    #   self-contained: true
+    #   grid: 
+    #     margin-width: 200px
+    #   # callout-appearance: minimal
+editor: visual
+
+# You can change the color theme of the rendered document 
+theme: default
+---
+
+{{< include ./_extensions/r-wasm/live/_knitr.qmd >}}
+
+::: {.callout-tip collapse="true" icon="true"}
+# Getting Started
+
+1. Download the `.qmd` and `.csv` files from Moodle and save them someplace on your computer where you can easily find again (the two files need to be in the same folder together). I strongly recommend that you save these files in a folder dedicated to activities for this class, not in your Downloads.
+
+2. Open the Quarto file in RStudio: `File > Open File... >`. (If you're working on the MHC RStudio server, you need to upload the file first: go to the `Files` panel, then click `Upload`. Upload both the Rmd and the csv file.)
+
+3. Update the author and date in the YAML header of this file.
+
+4. Click the `Knit` button. If successful, you should have a new window pop up with a nice looking HTML document.
+
+**Ask for help** if you encounter issues on any of the steps above. Once you've successfully made it through these steps, you can continue. 
+
+:::
+
+
+## Loading Packages
+
+As always, we start by loading all the packages that we'll need. We're going to be completing the following tasks:
+
+- reading a data set into R;
+- working with a data set (e.g., using the pipe (`%>%`) function to split commands across multiple lines, calculating numerical summaries);
+- creating mosaic plots.
+
+We'll need a different R package for each of these tasks. Use the code chunk below to load the necessary packages into R, now including the `ggmosaic` library.
+
+```{r load-packages, message = FALSE}
+library(readr)
+library(dplyr)
+library(ggplot2)
+library(ggmosaic)
+```
+
+## Data Context 
+
+The *Titanic* was a British passenger ship that famously sank in 1912 after hitting an iceberg in the North Atlantic Ocean. Approximately 2,200 passengers were on board the Titanic, and it's estimated that 1,500 of them did not survive the crash. Historians have worked diligently to collect data on the passengers that were aboard the Titanic. 
+
+We have data for 1,313 passengers, where the following information is available for each passenger:
+
+- `Name`: name
+- `PClass`: ticket class (1st, 2nd, 3rd)
+- `Age`: age (years)
+- `Sex`: binary sex (female, male)
+- `Survived`: indicator that the passenger survived (1 = survived, 0 = died)
+
+Our **first** research question is this: _were younger passengers more likely to survive than older passengers?_
+
+## Loading the Titanic Data
+
+Download `titanic.csv` from Moodle (if you haven't already) and make sure it's saved in the same folder as this `.qmd` file. Add code to the code chunk below to read the data set into R and save it as an object called `titanic`.
+
+```{r load-data, message = FALSE}
+# Load titanic data here
+titanic <- read_csv("titanic.csv")
+```
+
+
+Open up a new window to view these data and/or add code to the code chunk below to look at the first few rows.
+
+```{r look-at-data}
+# Code to view data here
+head(titanic)
+```
+
+
+::: {.callout-important collapse="true"}
+
+## Important Note on Loading Data
+
+* Do **not** use the command `data("titanic")` in your code. You need to run `titanic <- read_csv("titanic")` to properly import the CSV file. Otherwise, your code might use the **wrong dataset**.
+
+* Why? The `data()` command is used only when we want a pre-loaded dataset that comes with R/RStudio (i.e., a dataset that we don't have to import with the `read_csv()` command); an example of this might be NHANES, which comes with our RStudio distribution. 
+
+* Newer versions of R/RStudio come with a pre-loaded dataset called "titanic", which can be loaded by calling `data("titanic")` (or sometimes is pre-loaded *without* you running this command). 
+
+* **Even when you download/import the `titanic.csv` file provided here via `titanic <- read_csv("titanic")`, if you call `data("titanic")` *anywhere afterward* in your .Rmd file, the object `titanic` will reference the pre-loaded (wrong) version.** Alternatively, if you **forget to download/import the `titanic.csv` file provided here via `titanic <- read_csv("titanic")`, your code may use the wrong version.**
+
+:::
+
+# Part 2: Summarize
+
+Let's create a mosaic plot to visually compare passenger class and survival status (two categorical variables). Make sure to update the x-axis, y-axis, and color legend labels to make this plot more informative. 
+
+```{r graphical-summary warning = FALSE message = FALSE}
+# Create a mosaic plot
+titanic %>%
+  ggplot() +
+  geom_mosaic(aes(x = product(Survived, PClass), fill = Survived)) +
+  xlab('Insert Label Here') + 
+  ylab('Insert Label Here') +
+  scale_fill_manual('Insert Label Here', values = c("skyblue", "steelblue"))
+```
+
+
+::: .callout-tip collapse="true" icon="true"}
+
+# Question 2
+
+
+Write a short description that summarizes the information gained from your plot. Write this summary using good sentences that tell a story and do not resemble a checklist. 
+
+
+:::

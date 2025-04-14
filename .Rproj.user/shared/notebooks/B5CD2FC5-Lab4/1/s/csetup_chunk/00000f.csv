@@ -1,0 +1,4 @@
+"0","# This chunk includes set-up options"
+"0","# The 'include = FALSE` means that it is not shown when you"
+"0","# knit"
+"0","knitr::opts_chunk$set(echo = TRUE, error = TRUE)"

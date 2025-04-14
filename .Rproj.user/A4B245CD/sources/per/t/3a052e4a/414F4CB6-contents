@@ -1,0 +1,271 @@
+---
+title: ""
+subtitle: ""
+output:
+  pdf_document:
+    fig_height: 2.8
+    fig_width: 6
+    keep_tex: true
+  html_document:
+    fig_height: 3
+    fig_width: 5
+  word_document:
+    fig_height: 3
+    fig_width: 5
+header-includes:
+  - \usepackage{booktabs}
+  - \usepackage{soul}
+geometry: margin=0.6in
+---
+
+## STAT 242 Checkpoint Quiz # 4
+
+## Name: ____________________
+
+\bigskip
+
+**Q1.** In the 1970's, it was found that giving terminal cancer patients a dietary supplement of ascorbate could prolong their lives.  As a follow-up question, researchers wondered if the effect of the ascorbate was different when different organs were affected by the cancer.  We have a data set with records for 64 different cancer patients.  Each patient had cancer in one of 5 different organs: breast, bronchus, colon, ovary, or stomach.  For each patient, we have recorded their cancer type and their survival time.  Here we will treat the log of survival time as the response variable.  The R code below calculates the mean log survival time for each group of patients.
+
+```{r, echo = FALSE, message=FALSE, warning=FALSE}
+library(tidyverse)
+library(dplyr)
+
+cancer <- read_csv("CancerSurvival.csv") %>%
+  mutate(
+    log_survival_time = log(Survival)
+  )
+```
+
+```{r}
+cancer %>%
+  group_by(Organ) %>%
+  summarize(
+    mean_log_survival_time = mean(Survival)
+  )
+```
+
+Define the parameters as follows:
+\\
+\\
+ * $\mu_1$ is the mean log survival time for breast cancer patients similar to those enrolled in this study;
+ * $\mu_2$ is the mean log survival time for bronchus cancer patients similar to those enrolled in this study;
+ * $\mu_3$ is the mean log survival time for colon cancer patients similar to those enrolled in this study;
+ * $\mu_4$ is the mean log survival time for ovarian cancer patients similar to those enrolled in this study; and
+ * $\mu_5$ is the mean log survival time for stomach cancer patients similar to those enrolled in this study
+\\
+\\
+
+### (a) We would like to see if the average log survival time for \underline{breast cancer} is different from the average log survival time for \underline{stomach cancer}.  State the hypotheses for this test as a \underline{generic linear combination of the} \underline{means for the five groups} (that is, with $C_1 \mu_1, C_2 \mu_2$, etc.).
+
+\vspace{4cm}
+
+### (b) Based on the data, what is an \underline{estimate} of the linear combination specified in the hypotheses for (a)?  You can just plug in numbers; you do not need to simplify any arithmetic. 
+
+\vspace{3cm}
+
+
+\newpage
+
+## STAT 242 Checkpoint Quiz # 4
+\bigskip
+
+### (c) We would like to see if the average log survival time for \underline{breast and \textcolor{blue}{stomach} cancers (treated as a group)} are different from the average log survival time for the \underline{other three types}. State the hypotheses for this test as a \underline{generic linear combination of the means for the five groups} (that is, with $C_1 \mu_1, C_2 \mu_2$, etc.).
+
+For your reference, here are our parameter definitions again:
+
+ * $\mu_1$ is the mean log survival time for breast cancer patients similar to those enrolled in this study;
+ * $\mu_2$ is the mean log survival time for bronchus cancer patients similar to those enrolled in this study;
+ * $\mu_3$ is the mean log survival time for colon cancer patients similar to those enrolled in this study;
+ * $\mu_4$ is the mean log survival time for ovarian cancer patients similar to those enrolled in this study; and
+ * $\mu_5$ is the mean log survival time for stomach cancer patients similar to those enrolled in this study.
+
+
+\newpage
+
+## Stat 242 Checkpoint Quiz # 4
+
+**Q2.** Researchers took independent random samples from medical responders working in two different areas: downtown Cairo and a nearby suburb. They then measured the level of lead concentration in their blood. The sample of **126** responders subjected to constant inhalation of automobile exhaust fumes in downtown Cairo had an average blood level concentration of **29.2 $\mu$g/dl**; a control sample of **50** responders from the suburb, with no history of exposure, had an average blood level concentration of **18.2** $\mu$g/dl. The standard error of the difference was **1.18** $\mu$g/dl.
+
+
+### (a) Let \underline{sample 1} be the data for the responders in \ul{subjected to constant inhalation of automobile exhaust fumes}. Let sample 2 be the data for the responders \ul{with no history of exposure}.
+
+### Based on the problem statement, report the following:
+
+* $n_1 =$
+
+* $n_2 =$
+
+* (Describe in words): $\mu_1$ = 
+
+* (Describe in words): $\mu_2$ = 
+
+* $\hat{\mu}_1$ = 
+
+* $\hat{\mu}_2$ = 
+
+* SE($\hat{\mu}_1 - \hat{\mu}_2$) = 
+
+* Total degrees of freedom (df) = 
+
+### (b) Find a \ul{98\%} confidence interval for the difference in mean level of blood lead concentration in those subjected to constant inhalation of exhaust fumes and those who are not. \ul{Do not simplify your arithmetic; simply plug in numbers.} You will need \ul{one} of the following calls to `qt()`; \ul{circle which output you are using}. 
+
+
+```{r}
+qt(.99, df = 176, lower.tail = TRUE)
+qt(.99, df = 175, lower.tail = TRUE)
+qt(.99, df = 174, lower.tail = TRUE)
+qt(.985, df = 176, lower.tail = TRUE)
+qt(.985, df = 175, lower.tail = TRUE)
+qt(.985, df = 174, lower.tail = TRUE)
+qt(.98, df = 176, lower.tail = TRUE)
+qt(.98, df = 175, lower.tail = TRUE)
+qt(.98, df = 174, lower.tail = TRUE)
+```
+
+## STAT 242 Checkpoint Quiz # 4
+
+\bigskip
+
+\ul{YOUR CONFIDENCE INTERVAL HERE}:
+
+\vspace{3cm}
+
+
+### (c) Consider the following hypothesis test:
+
+* $H_0:$ There is no difference in the mean level of blood lead concentration in those subjected to constant inhalation of automobile fumes and those who are not.
+
+* $H_A:$ The mean level of blood lead concentration is \ul{higher} for those subjected to constant inhalation of automobile fumes than it is for those that are not.
+
+### Based on the symbols in (a), express $H_0$ and $H_A$ \ul{symbolically}.
+
+\vspace{4cm}
+
+### (d) What is the observed $t$-statistic associated with the hypothesis test in (c)? Plug in numbers but do \ul{not} simplify your arithmetic.
+
+\vspace{3cm}
+
+### (e) Suppose the observed $t$-statistic in (d) came out to equal 9.0.  (It isn't --- this is just for the sake of the problem). Interpret this $t$-statistic in \ul{context}. 
+
+
+\newpage
+
+
+
+## Stat 242 Checkpoint Quiz # 4
+
+\bigskip
+
+**Q3.** In the 1970s, it was found that giving terminal cancer patients a dietary supplement of ascorbate could prolong their lives.  As a follow-up question, researchers wondered if the effect of the ascorbate was different when different organs were affected by the cancer.  We have a data set with records for 64 different cancer patients.  Each patient had cancer in one of 5 different organs: breast, bronchus, colon, ovary, or stomach.  For each patient, we have recorded their cancer type and their survival time.  Here we will treat the log of survival time as the response variable.
+
+The R code below produces output for a confidence interval and a hypothesis test for the hypotheses:
+
+$H_0: \frac{1}{2} (\mu_1 + \textcolor{blue}{\mu_3}) - \frac{1}{3} (\mu_2 + \mu_4 + \mu_5) = 0$
+
+$H_A: \frac{1}{2} (\mu_1 + \textcolor{blue}{\mu_3}) - \frac{1}{3} (\mu_2 + \mu_4 + \mu_5) \neq 0$
+
+Here, the parameters are as follows:
+
+ * $\mu_1$ is the mean log survival time for breast cancer patients similar to those enrolled in this study;
+ * $\mu_2$ is the mean log survival time for bronchus cancer patients similar to those enrolled in this study;
+ * $\mu_3$ is the mean log survival time for colon cancer patients similar to those enrolled in this study;
+ * $\mu_4$ is the mean log survival time for ovarian cancer patients similar to those enrolled in this study; and
+ * $\mu_5$ is the mean log survival time for stomach cancer patients similar to those enrolled in this study.
+
+```{r, echo = FALSE, message=FALSE, warning=FALSE}
+library(tidyverse)
+library(dplyr)
+library(gmodels)
+
+cancer <- read_csv("CancerSurvival.csv") %>%
+  mutate(
+    log_survival_time = log(Survival)
+  )
+
+options(digits = 3)
+```
+
+```{r, echo = TRUE, eval = FALSE}
+anova_fit <- lm(log_survival_time ~ Organ, data = cancer)
+fit.contrast(anova_fit, "Organ", c(1/2, -1/3, 1/2, -1/3, -1/3), conf.int = 0.95)
+```
+
+```{r, echo = FALSE, eval = FALSE}
+anova_fit <- lm(log_survival_time ~ Organ, data = cancer)
+temp <- fit.contrast(anova_fit, "Organ", c(1/2, -1/3, 1/2, -1/3, -1/3), conf.int = 0.95)
+rownames(temp) <- NULL
+temp
+```
+\begin{verbatim}
+##      Estimate Std. Error t value Pr(>|t|) lower CI upper CI
+## [1,]     1.13      0.351    3.23  0.00204     0.43     1.83
+\end{verbatim}
+<!--\vspace{-2cm}-->
+
+#### (a) Draw a conclusion about the strength of evidence against the null hypothesis.  Your statement should be in the context of this question.
+ \
+\vspace{4cm}
+<!--\vspace{7cm}-->
+
+#### (b) Interpret the confidence interval in context.  Include a description of the meaning of the phrase *95\% confident* as part of your answer.
+
+
+\newpage
+
+
+## Stat 242 Checkpoint Quiz # 4
+
+\bigskip
+
+**Q4.** In the 1970's, it was found that giving terminal cancer patients a dietary supplement of ascorbate could prolong their lives.  As a follow-up question, researchers wondered if the effect of the ascorbate was different when different organs were affected by the cancer.  We have a data set with records for 64 different cancer patients.  Each patient had cancer in one of 5 different organs: breast, bronchus, colon, ovary, or stomach.  For each patient, we have recorded their cancer type and their survival time.  Here we will treat the log of survival time as the response variable.
+
+The researchers were interested in seeing whether or not the difference in mean log survival times between breast cancer patients and ovarian cancer patients is 0, among patients similar to those enrolled in this study.  They expressed this question in the following hypothesis test:
+
+$H_0: \mu_1 - \mu_4 = 0$
+
+$H_A: \mu_1 - \mu_4 \neq 0$
+
+Here, $\mu_1$ represented the \underline{mean for breast cancer patients} and $\mu_4$ represented the \underline{mean for ovarian cancer patients}.
+
+Based on their sample data, an estimate of $\mu_1 - \mu_4$ was \underline{0.408}, with a standard error of \underline{0.607}.
+
+#### (a) Show the set up for calculating the observed $t$-statistic associated with this test based on the estimate and standard error above.  No need to simplify the arithmetic to produce an actual number! 
+ \
+\vspace{3cm}
+
+#### (b) What are the degrees of freedom for the distribution of the $t$-statistic under $H_0$?
+\
+\vspace{1cm}
+
+#### (c) Suppose the $t$-statistic in (b) turned out to equal 1. (It isn't --- this is just for the sake of the problem).  
+\
+
+**Draw a picture illustrating how the $p$-value for the test would be calculated. Be sure to label your axes and indicate how this value of "1" shows up in your picture.**
+
+
+
+\newpage
+
+## Stat 242 Checkpoint Quiz # 4
+\bigskip
+
+Use the R output below to answer the following question.
+```{r, echo = FALSE}
+options(digits = 7)
+```
+
+```{r}
+qt(0.975, df = 64)
+qt(0.975, df = 63)
+qt(0.975, df = 62)
+qt(0.975, df = 59)
+```
+
+
+
+### (d) Show the set up for calculating a 95% confidence interval for $\mu_1 - \mu_4$ based on the estimate and standard error given  No need to simplify your arithmetic; you can just plug in values. You will need the output from only \underline{one} of the calls to `qt()` above. Accordingly, keep \underline{all of the decimal points} in your answer so it's clear which call to `qt()` you are using. 
+
+\newpage
+
+
+

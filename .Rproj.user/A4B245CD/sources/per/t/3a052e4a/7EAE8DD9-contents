@@ -1,0 +1,215 @@
+---
+title: "Lab 5: Logistic Regression"
+author: "YOUR NAME HERE"
+# format: live-html
+# engine: knitr
+format:
+    pdf:
+      keep-tex: true
+      include-in-header:
+         text: |
+           \usepackage{fvextra}
+           \DefineVerbatimEnvironment{Highlighting}{Verbatim}{breaklines,commandchars=\\\{\}}
+            \DefineVerbatimEnvironment{OutputCode}{Verbatim}{breaklines,commandchars=\\\{\}}
+    html:
+      self-contained: true
+      grid:
+        margin-width: 200px
+      code-fold: false
+      # callout-appearance: minimal
+editor: visual
+
+# You can change the color theme of the rendered document 
+theme: default
+---
+
+```{r setup, include=FALSE}
+# This chunk includes set-up options
+# The 'include = FALSE` means that it is not shown when you
+# knit
+knitr::opts_chunk$set(echo = TRUE, error = TRUE)
+```
+
+::: {.callout-tip collapse="true" icon="true"}
+# Getting Started
+
+1.  Download the `.qmd` and `.csv` files from Moodle and save them someplace on your computer where you can easily find again (the two files need to be in the same folder together). I strongly recommend that you save these files in a folder dedicated to activities for this class, not in your Downloads.
+
+2.  Open the Quarto file in RStudio: `File > Open File... >`. (If you're working on the MHC RStudio server, you need to upload the file first: go to the `Files` panel, then click `Upload`. Upload both the Rmd and the csv file.)
+
+3.  Update the author and date in the YAML header of this file.
+
+4.  Click the `Knit` button. If successful, you should have a new window pop up with a nice looking HTML document.
+
+**Ask for help** if you encounter issues on any of the steps above. Once you've successfully made it through these steps, you can continue.
+:::
+
+## Loading Packages
+
+As always, we start by loading all the packages that we'll need. We're going to be completing the following tasks:
+
+-   reading a data set into R;
+-   working with a data set (e.g., using the pipe (`%>%`) function to split commands across multiple lines, calculating numerical summaries);
+-   creating mosaic plots.
+
+We'll need a different R package for each of these tasks. Use the code chunk below to load the necessary packages into R, now including the `ggmosaic` library.
+
+```{r load-packages, message = FALSE}
+library(readr)
+library(dplyr)
+library(ggplot2)
+library(ggmosaic)
+```
+
+## Data Context
+
+The *Titanic* was a British passenger ship that famously sank in 1912 after hitting an iceberg in the North Atlantic Ocean. Approximately 2,200 passengers were on board the Titanic, and it's estimated that 1,500 of them did not survive the crash. Historians have worked diligently to collect data on the passengers that were aboard the Titanic.
+
+We have data for 1,313 passengers, where the following information is available for each passenger:
+
+-   `Name`: name
+-   `PClass`: ticket class (1st, 2nd, 3rd)
+-   `Age`: age (years)
+-   `Sex`: binary sex (female, male)
+-   `Survived`: indicator that the passenger survived (1 = survived, 0 = died)
+
+## Loading the Titanic Data
+
+Download `titanic.csv` from Moodle (if you haven't already) and make sure it's saved in the same folder as this `.qmd` file. Add code to the code chunk below to read the data set into R and save it as an object called `titanic`.
+
+```{r load-data, message = FALSE}
+# Load titanic data here
+titanic = read_csv("titanic.csv")
+```
+
+Open up a new window to view these data and/or add code to the code chunk below to look at the first few rows.
+
+```{r look-at-data}
+# Code to view data here
+head(titanic)
+```
+
+## Last Time: Multiple Linear Regression
+
+We considered using class (via the variable `PClass`), age, *and* (binary) sex to predict survival probabilities. The model equation is:
+
+\begin{align*}
+\mathbb{P}(Survived = 1 \mid PClass, Age, Sex) &= \beta_0 + \beta_1 I(PClass = 2nd) + \beta_2 I(PClass = 3rd) \\
+&+ \beta_3 (Age) + \beta_4 I(Sex = Male)
+\end{align*}
+
+Before we perform regression, let's be sure to filter out any missing values:
+
+```{r}
+# CODE HERE TO FILTER OUT MISSING VALUES
+titanic = titanic %>% filter(!is.na(PClass))
+titanic = titanic %>% filter(!is.na(Age))
+titanic = titanic %>% filter(!is.na(Sex))
+```
+
+We can perform regression with the following code to get estimates of $\beta_0, \ldots, \beta_4$.
+
+```{r}
+mod <- titanic %>% with(lm(Survived ~ PClass + Age + Sex))
+mod$coefficients
+```
+
+::: {.callout-tip collapse="true"}
+# Exercise: Predict Survival Probabilities
+
+We can predict the probability of survival for Rose (a 17 year old female in 1st class) and Jack (a 20 year old male in 3rd class) using `predict.lm()`.
+
+```{r}
+# Use predict.lm function instead to get survival probabilities
+predict.lm(mod, newdata = data.frame(PClass = "1st", Age = 17, Sex = "female"))
+
+predict.lm(mod, newdata = data.frame(PClass = "3rd", Age = 20, Sex = "male"))
+```
+
+-   The predicted probability of Rose surviving is 1.028441 (ahhhh!)
+-   The predicted probability of Jack surviving is 0.1157569.
+:::
+
+## Logistic Regression
+
+For logistic regression, our model equation is:
+
+\begin{align*}
+\log(odds(Survived \mid PClass, Age, Sex)) &= \beta_0 + \beta_1 I(PClass = 2nd) + \beta_2 I(Pclass = 3rd) \\
+                                           &+ \beta_3 (Age) + \beta_4 I(Sex = Male)
+\end{align*}
+
+```{r}
+# YOUR CODE HERE
+mod_logreg = titanic %>% 
+  with(glm(Survived ~ PClass + Age + Sex, family = binomial))
+
+mod_logreg$coefficients
+```
+
+In the code above,
+
+-   `glm` stands for "general linear model"
+-   the dollar sign `$` is selecting out the estimated regression coefficients from the object `mod_logreg`
+-   `family = binomial` tells R to perform *logistic regression*
+
+::: {.callout-tip collapse="true"}
+# Exercise: What happens if we forget `family = binomial`?
+
+```{r}
+titanic %>% with(glm(Survived ~ PClass + Age + Sex))
+```
+
+**Answer.** When we drop `family = binomial`, even though we are using the command `glm`, the code defaults to regular linear regression.
+:::
+
+We now interpret the *exponentiated* $\hat\beta$ coefficients, since these give us more intuitive explanations as to what the data is telling us (i.e., interpretations in terms of odds rather than log(odds)).
+
+```{r}
+# EXPONENTIATE ESTIMATED BETA COEFFICIENTS HERE
+exp(mod_logreg$coefficients)
+```
+
+::: {.callout-tip collapse="true"}
+# Exercise: Interpret $\exp(\hat\beta_0)$
+
+Write out the interpretation of $\exp(\hat\beta_0)$, plugging in the estimated provided by the R code.
+
+$\exp(\hat\beta_0)$ interpretation: The odds of surviving for a first class, female passenger of age = 0 years is about 42.9.
+:::
+
+## Recover Probability Estimates
+
+**R Code for Rose:**
+
+```{r}
+predict.glm(mod_logreg, newdata = data.frame(PClass = "1st", Age = 17, Sex = "female"))
+```
+
+**Odds of Rose Surviving:**
+
+```{r}
+# YOUR CODE HERE
+odds_rose_surviving = exp(3.093656)
+(prob_rose_surviving = odds_rose_surviving/(1 + odds_rose_surviving))
+
+```
+
+**Probability of Rose Surviving**
+
+$$\frac{p}{1- p} = 22.05757 \Longrightarrow p = \frac{odds}{odds + 1} \approx \frac{22.05757}{22.05757 + 1} \approx 0.957$$
+
+or 95.7%.
+
+::: {.callout-tip collapse="true"}
+# Exercise: Probability of Jack Surviving
+
+Calculate the probability of Rose's lover (Jack) surviving (20 year old, 3rd class male)
+
+```{r}
+# YOUR CODE HERE
+
+```
+
+We can compare this with what we got with regular linear regression: 0.1157569 (or about 11.6%).
+:::

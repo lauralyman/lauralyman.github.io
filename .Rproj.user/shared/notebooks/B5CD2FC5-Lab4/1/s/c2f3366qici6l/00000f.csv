@@ -1,0 +1,2 @@
+"0","# YOUR CODE HERE"
+"0","mod <- titanic %>% with(lm(Survived ~ PClass + Age + Sex))"

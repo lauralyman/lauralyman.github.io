@@ -1,0 +1,33 @@
+{
+    "id": "06EE2996",
+    "path": "~/R/STAT244/Part4VideoInstructions.qmd",
+    "project_path": null,
+    "type": "quarto_markdown",
+    "hash": "0",
+    "contents": "",
+    "dirty": false,
+    "created": 1742681283397.0,
+    "source_on_save": false,
+    "relative_order": 2,
+    "properties": {
+        "rmdVisualMode": "false",
+        "rmdVisualWrapConfigured": "true",
+        "tempName": "Untitled1",
+        "source_window_id": "",
+        "Source": "Source",
+        "docOutlineVisible": "1",
+        "rmdVisualCollapsedChunks": "",
+        "cursorPosition": "15,33",
+        "scrollLine": "0",
+        "rmdVisualModeLocation": "2:0",
+        "quartoPreviewFormat": "html"
+    },
+    "folds": "",
+    "lastKnownWriteTime": 1742682259,
+    "encoding": "UTF-8",
+    "collab_server": "",
+    "source_window": "",
+    "last_content_update": 1742682259,
+    "read_only": false,
+    "read_only_alternatives": []
+}

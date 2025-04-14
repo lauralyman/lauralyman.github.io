@@ -1,0 +1,143 @@
+---
+title: 'Lab 2: Confidence Intervals'
+author: "YOUR NAME"
+date: "YYYY-MM-DD"
+output:
+  pdf_document: default
+  html_document: default
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE, error = TRUE)
+set.seed(1)
+```
+
+
+# Getting Started
+
+1. Download the `.Rmd` and `.csv` files from Moodle and save them someplace on your computer where you can easily find again (the two files need to be in the same folder together). I strongly recommend that you save these files in a folder dedicated to activities for this class, not in your Downloads.
+
+2. Update the author and date in the YAML header of this file.
+
+3. Click the `Knit` button. If successful, you should have a new window pop up with a nice looking PDF.
+
+**Ask for help** if you encounter issues on any of the steps above. Once you've successfully made it through these steps, you can continue. 
+
+
+
+# Loading Packages and Data
+
+## Load Packages
+
+As always, we start by loading all the packages that we'll need. 
+
+```{r load-packages, message = F}
+library(readr)
+library(dplyr)
+library(ggplot2)
+library(broom)
+# For reading data from Google Sheet
+library(gsheet)
+```
+
+
+
+## Data Context
+
+In this activity, we'll continue looking at data on rental bike usage in Washington DC. We have information on daily rental bike usage for two years (731 days). Available variables include:  
+
+- `date`: date in format YYYY-MM-DD
+- `season`: winter, spring, summer, fall
+- `year`: 2011 or 2012
+- `month`: 3-letter month abbreviation
+- `day_of_week`: 3-letter abbreviation for day of week
+- `weekend`: TRUE if the case is a weekend, FALSE otherwise
+- `holiday`: is the day a holiday? (yes or no)
+- `temp_actual`: temperature in degrees Fahrenheit
+- `temp_feel`: what the temperature *feels* like in degrees Fahrenheit
+- `humidity`: proportion from 0 to 1 giving the humidity level
+- `windspeed`: wind speed in miles per hour
+- `weather_cat`: `categ1` = clear to partly cloudy, `categ2` = mist plus some clouds, `categ3` = light precipitation to thunderstorms
+- `riders_casual`: count of daily rides by casual (non-registered) users
+- `riders_registered`: count of daily rides by registered users
+- `riders_total`: count of total daily rides (`riders_casual + riders_registered`)
+
+
+
+## Load Data
+
+Download `bikeshare.csv` from Moodle (if you haven't already) and make sure it's saved in the same folder as this .Rmd file. Enter code into the following code chunk to read in this dataset and save it as an object called `bikes.pop`.
+
+```{r load-data, message = FALSE}
+# Your code here
+bikes.pop <- read_csv("bikeshare.csv")
+```
+
+
+# Sample From The Population
+
+Let's suppose that the two years of bike share data contained in `bikes.pop` is our population of interest (with **731 data points in total**) Today, you will each take a random sample of **n = 150 days** from the two years of bike share data. Since the `sample_n` function is random, we will all end up with slightly different samples.
+
+```{r sample-data}
+bikes.sample <- bikes.pop %>%
+  # Take random sample of size 150 from bikes.pop population
+  sample_n(size = 150) 
+```
+
+
+Check that your sample data set has 150 rows. 
+
+```{r check-dimensions}
+# Your code here
+dim(bikes.sample)
+```
+
+
+
+# Classical Confidence Intervals
+
+We are interested in the average number of daily casual bike riders in the D.C. area. Today we will investigate plausible values for this population parameter. 
+
+Take the average of `riders_casual` in your **SAMPLE** data (`bikes.sample`). Save this value as as the variable `sample_mean` so that you can access it later.
+
+```{r linear-regression}
+(sample_mean <- mean(bikes.sample$riders_casual))
+```
+
+
+Calculate the standard error for the sample mean. **Hint.** You can use the `sd()` function to get the standard deviation of the sample mean (i.e., $s$ in the formula SE = $s/\sqrt{n}$.)
+
+```{r standard-error}
+s <- sd(bikes.sample$riders_casual)
+n <- nrow(bikes.sample)
+(SE <- s/sqrt(n))
+```
+
+
+Using the sample statistic and standard error that you got above, construct a 95% confidence interval for the true population mean
+
+```{r confint-by-hand}
+## Lower bound = estimate - t_(1-alpha/2)^df * standard error
+## Upper bound = estimate + t_(1-alpha/2)^df * standard error
+# Your code here
+alpha = 0.05
+t_critical <- qt(1 - alpha/2, df = n - 1, lower.tail = TRUE)
+LB <- sample_mean - t_critical * SE
+UB <- sample_mean + t_critical * SE
+print(paste("Lower bound: ", LB))
+print(paste("Upper bound: ", UB))
+```
+
+
+Now, use the `t.test()` function to get 95% confidence interval for the true average number of daily casual bike riders. 
+
+```{r confint-by-confint}
+t.test(bikes.sample$riders_casual)
+```
+
+
+# Interpret
+
+Write an accurate sentence interpreting the 95% confidence interval for the true average number of daily casual bike riders in context. Plug in the lower and upper bounds in the sentence. Then explain what is meant by _95% confident_. 
+
+> We are 95% confident that the true average number of daily casual bike riders is between 714 and 933 riders. By 95% confident, we mean that 95% of all samples of this size (n = 150 riders) would have confidence intervals constructed on them that contain the true population parameter.  

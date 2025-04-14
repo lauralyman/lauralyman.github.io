@@ -1,0 +1,28 @@
+{
+    "id": "414F4CB6",
+    "path": "~/R/STAT242/CPQuizzes/CPQuiz4-Spring25/Lyman-CP-Quiz-4-Actual.Rmd",
+    "project_path": null,
+    "type": "r_markdown",
+    "hash": "35168201",
+    "contents": "",
+    "dirty": false,
+    "created": 1741369122672.0,
+    "source_on_save": false,
+    "relative_order": 7,
+    "properties": {
+        "tempName": "Untitled1",
+        "chunk_output_type": "inline",
+        "source_window_id": "",
+        "Source": "Source",
+        "cursorPosition": "48,2",
+        "scrollLine": "0"
+    },
+    "folds": "",
+    "lastKnownWriteTime": 1741370415,
+    "encoding": "UTF-8",
+    "collab_server": "",
+    "source_window": "",
+    "last_content_update": 1741370415653,
+    "read_only": false,
+    "read_only_alternatives": []
+}

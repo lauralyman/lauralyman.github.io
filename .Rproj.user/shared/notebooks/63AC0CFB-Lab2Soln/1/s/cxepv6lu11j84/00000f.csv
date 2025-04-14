@@ -1,0 +1,7 @@
+"0","s <- sd(bikes.sample$riders_casual)"
+"0","n <- nrow(bikes.sample)"
+"0","(SE <- s/sqrt(n))"
+"1","[1]"
+"1"," 55.04719"
+"1","
+"

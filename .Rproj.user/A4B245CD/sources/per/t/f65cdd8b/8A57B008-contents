@@ -1,0 +1,144 @@
+---
+title: "Portfolio Part 3: Accompanying Instructions"
+author: "STAT 244"
+format:
+    pdf:
+      keep-tex: true
+      include-in-header: 
+         text: |
+           \usepackage{fvextra}
+           \DefineVerbatimEnvironment{Highlighting}{Verbatim}{breaklines,commandchars=\\\{\}}
+            \DefineVerbatimEnvironment{OutputCode}{Verbatim}{breaklines,commandchars=\\\{\}}
+    html: 
+      self-contained: true
+      grid: 
+        margin-width: 200px
+      callout-appearance: minimal
+editor: visual
+
+# You can change the color theme of the rendered document 
+theme: default
+---
+
+These instructions refer to the specific video on Moodle: [Portfolio Part 3: Pushing to Github from RStudio](https://moodle.mtholyoke.edu/mod/kalvidres/view.php?id=1096465). Please note that this document *does not replace* the video instructions.
+
+Make sure all commands are run in the `Terminal` (on the bottom of RStudio), which is the tab next to `Console` and `Background Jobs`.
+
+::: {.callout-note collapse="true"}
+# (1) Note: At Time 00:19 in Video:
+
+-   Ignore all the files I have on the bottom right
+-   Your code space will just have `.gitignore`, your `Rproj` file, and `README.md`.
+:::
+
+::: {.callout-tip collapse="true"}
+# (2) Command At Time 00:28 in Video (Optional)
+
+``` markdown
+ls -al ~/.ssh
+```
+
+-   This command lists (using `ls`) all keys currently existing in a (hidden) file called `~/.ssh`
+-   Even if you have a key here, you probably should generate a new one, so running this command isn't strictly necessary; you can proceed with the video.
+:::
+
+::: {.callout-tip collapse="false"}
+# (3) Command At Time 01:01 in Video:
+
+``` markdown
+ssh-keygen -t ed25519 -C "your_email@example.com"
+```
+
+-   **Replace `"your_email@example.com"` with your MHC email address.**
+-   This command generates a personal key for you.
+:::
+
+::: {.callout-tip collapse="false"}
+# (4) Command At Time 02:00 in Video:
+
+``` markdown
+eval "$(ssh-agent -s)"
+```
+:::
+
+::: {.callout-tip collapse="false"}
+# (5) Command At Time 02:20 in Video:
+
+``` markdown
+ssh-add ~/.ssh/id_ed25519
+```
+:::
+
+::: {.callout-tip collapse="false"}
+# (6) Command At Time 02:33 in Video:
+
+``` markdown
+cat ~/.ssh/id_ed25519.pub
+```
+
+-   The command `cat` prints the content of a file in the terminal (which we will then copy)
+
+-   When copying your key from the terminal (after using `cat` to output it), don't add any newlines or white space.
+:::
+
+::: {.callout-tip collapse="false"}
+# (7) Command At Time 04:12 in Video:
+
+``` markdown
+git remote -v
+```
+
+**If this command generates an error with the words `git` and `fatal`**, rest assured -- this simply means you are not entering the commands in the directory (folder) where your Github documents are located.
+
+-   To fix this, go to the `Files` explorer and find the folder with your `.gitignore`, `README.md`, and `Rproj` file (mine is called `test_website.Rproj`):
+
+-   ![](Fig1.png){width="397"}
+
+-   Click on the blue Gear icon and select `Copy Folder Path to Clipboard`. This will copy the exact location of your folder.
+
+-   ![](Fig2.png){width="396"}
+
+-   In `Terminal`, type `cd` (which is `cd` followed by a space) and then paste in your folder location from your clipboard. For example, I would have: `cd ~/R/STAT244/test_website`
+
+-   In general, the command `cd` in `Terminal` means "go to this location" (for Linux systems).
+
+-   Now you should try:
+
+    ``` markdown
+    git remote -v
+    ```
+
+    and you should see something akin to what is in the video:
+
+    ``` markdown
+    origin https://github.com/lauralyman/lauralyman.github.io.git (fetch)
+    origin https://github.com/lauralyman/lauralyman.github.io.git (pull)
+    ```
+:::
+
+::: {.callout-tip collapse="false"}
+# (8) Full Command At Time 05:33 in Video:
+
+The video makes this hard to see, but the entire command is:
+
+``` markdown
+git remote set-url origin git@github.com:OWNER/REPOSITORY.git
+```
+
+where you replace `OWNER` with your Github username (mine is `lauralyman`) and `REPOSITORY` with the name of your online repository (which should end in `github.io`; mine is `lauralyman.github.io`). So the command I enter is:
+
+``` markdown
+git remote set-url origin git@github.com:lauralyman/lauralyman.github.io.git
+```
+
+:::
+
+# References
+
+-   [Checking for existing SSH keys](https://docs.github.com/en/authentication/connecting-to-github-with-ssh/checking-for-existing-ssh-keys)
+
+-   [Generating a new SSH key and adding it to the ssh-agent](https://docs.github.com/en/authentication/connecting-to-github-with-ssh/generating-a-new-ssh-key-and-adding-it-to-the-ssh-agent)
+
+-   [Adding a new SSH key to your GitHub account](https://docs.github.com/en/authentication/connecting-to-github-with-ssh/adding-a-new-ssh-key-to-your-github-account)
+
+- [Managing remote repositories](https://docs.github.com/en/get-started/getting-started-with-git/managing-remote-repositories#switching-remote-urls-from-https-to-ssh)

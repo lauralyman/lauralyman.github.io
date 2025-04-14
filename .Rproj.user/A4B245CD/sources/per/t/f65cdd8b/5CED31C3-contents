@@ -1,0 +1,118 @@
+---
+title: "STAT 244: Lab 2"
+author: "Lauraaaaaaa"
+format:
+    pdf:
+      keep-tex: true
+      include-in-header: 
+         text: |
+           \usepackage{fvextra}
+           \DefineVerbatimEnvironment{Highlighting}{Verbatim}{breaklines,commandchars=\\\{\}}
+            \DefineVerbatimEnvironment{OutputCode}{Verbatim}{breaklines,commandchars=\\\{\}}
+    html: 
+      self-contained: true
+      grid: 
+        margin-width: 200px
+      callout-appearance: minimal
+editor: visual
+
+# You can change the color theme of the rendered document 
+theme: default
+---
+
+## Loading Needed Libraries
+
+```{r message = FALSE}
+library(dplyr)
+library(gsheet)
+```
+
+If you get an error about there being no package called `gsheet`, this means you need to install it.
+
+-   Go to the `Packages` panel (usually the bottom right of RStudio).
+
+-   Then click `Install` (top left button under `Packages` panel).
+
+-   Search for `gsheet`, keep all the default options, and click `Install`.
+
+If successful, you should be able to run the first code chunk and nothing will appear to happen.
+
+## Pull Google Form Data
+
+```{r}
+# Load our class data from the spreadsheet linked to the Google form
+url_part_1 <- 'https://docs.google.com/spreadsheets/d/'
+url_part_2 <- '1aLJz-Z_Pj2O3zARskaDUljvik8H2Tk2E8ynjxs1bhOI/edit?usp=sharing'
+
+form_url   <- paste(url_part_1, url_part_2)
+class_data <- gsheet2tbl(form_url)
+
+```
+
+You should see `class_data` appear in the `Environment` panel (usually the top right of RStudio). Double-click on it.
+
+::: {.callout-tip collapse="true"}
+## Engagement
+
+Try to find your entered Google form data in `class_data`. What was your time stamp?
+
+> **YOUR ANSWER HERE**
+:::
+
+## Data Cleaning
+
+```{r}
+# Data Cleaning
+class_data <- class_data %>% 
+              mutate(Name = `First Name`,
+                     Outcome1 = as.numeric(`Outcomes [Roll 1]`),
+                     Outcome2 = as.numeric(`Outcomes [Roll 2]`),
+                     Outcome3 = as.numeric(`Outcomes [Roll 3]`),
+                     Outcome4 = as.numeric(`Outcomes [Roll 4]`),
+                     Outcome5 = as.numeric(`Outcomes [Roll 5]`),
+                     Outcome6 = as.numeric(`Outcomes [Roll 6]`),
+                     Outcome7 = as.numeric(`Outcomes [Roll 7]`),
+                     Outcome8 = as.numeric(`Outcomes [Roll 8]`),
+                     Outcome9 = as.numeric(`Outcomes [Roll 9]`),
+                     Outcome10 = as.numeric(`Outcomes [Roll 10]`))
+# Data cleaning
+class_data <- class_data %>% mutate(Sample_Mean = as.numeric(`Please calculate the average value you got over your 10 die rolls.`))
+
+# Select out relevant variables
+class_data <- class_data %>% 
+              select(Name, Outcome1, Outcome2, Outcome3,
+                     Outcome4, Outcome5, Outcome6, Outcome7,
+                     Outcome8, Outcome9, Outcome10, Sample_Mean)
+
+```
+
+```{r}
+# Make a list of all the die rolls acrosss all members in class
+# for plotting
+combo_data <- c(class_data$Outcome1,
+                class_data$Outcome2, class_data$Outcome3,
+                class_data$Outcome4, class_data$Outcome5,
+                class_data$Outcome6, class_data$Outcome7,
+                class_data$Outcome8, class_data$Outcome9,
+                class_data$Outcome10) 
+
+```
+
+## Plotting the Results
+
+Fill in the axes labels below!
+
+```{r}
+# Histogram of all of the die rolls in the class 
+hist(combo_data, breaks = seq(0.5, 6.5, 1),
+     xlab = "Outcome of Die Rolls",
+     ylab = "Count",
+     main = "Distribution of Die Rolls Across Whole Class")
+# Histogram of sample means calculated for each person's 
+# sample of 10 die rolls 
+hist(class_data$Sample_Mean,
+     xlab = "Mean Die Roll Value Calculated By Student",
+     ylab = "Count",
+     main = "Distribution of Sample Means Across Whole Class")
+
+```

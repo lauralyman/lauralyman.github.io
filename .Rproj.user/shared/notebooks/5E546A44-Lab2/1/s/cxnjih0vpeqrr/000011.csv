@@ -1,0 +1,7 @@
+"0","# Histogram of sample means calculated for each person's "
+"0","# sample of 10 die rolls "
+"0","hist(class_data$Sample_Mean,"
+"0","     xlab = ""Mean Die Roll Value Calculated By Student"","
+"0","     ylab = ""Count"","
+"0","     main = ""Distribution of Sample Means Across Whole Class"")"
+"0",""

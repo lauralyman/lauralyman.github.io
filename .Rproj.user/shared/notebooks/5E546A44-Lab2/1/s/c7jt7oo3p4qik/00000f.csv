@@ -1,0 +1,7 @@
+"0","# Load our class data from the spreadsheet linked to the Google form"
+"0","url_part_1 <- 'https://docs.google.com/spreadsheets/d/'"
+"0","url_part_2 <- '1aLJz-Z_Pj2O3zARskaDUljvik8H2Tk2E8ynjxs1bhOI/edit?usp=sharing'"
+"0",""
+"0","form_url   <- paste(url_part_1, url_part_2)"
+"0","class_data <- gsheet2tbl(form_url)"
+"0",""

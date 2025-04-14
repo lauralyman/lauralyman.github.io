@@ -1,0 +1,501 @@
+---
+title: "Assignment 1"
+author: "YOUR NAME HERE"
+format:
+    pdf:
+      keep-tex: true
+      include-in-header: 
+         text: |
+           \usepackage{fvextra}
+           \DefineVerbatimEnvironment{Highlighting}{Verbatim}{breaklines,commandchars=\\\{\}}
+            \DefineVerbatimEnvironment{OutputCode}{Verbatim}{breaklines,commandchars=\\\{\}}
+    html: 
+      self-contained: true
+      grid: 
+        margin-width: 200px
+      callout-appearance: minimal
+editor: visual
+
+# You can change the color theme of the rendered document 
+theme: default
+---
+
+```{r setup, include=FALSE}
+# This chunk includes set-up options
+# The 'include = FALSE` means that it is not shown when you
+# knit
+knitr::opts_chunk$set(echo = TRUE, error = TRUE)
+```
+
+```{r include = FALSE, message = FALSE}
+# Load needed libraries
+library(dplyr)
+library(ggplot2)
+```
+
+::: {.callout-tip collapse="true"}
+# Getting Started
+
+1.  Add your **name** to the `author` field in the YAML header.
+2.  Make sure you can **knit** your document. The keyboard shortcut for knitting is `Command+Shift+K` for MacOS/Linux and `Ctrl+Shift+K` for Windows. For now, I recommend **knitting to HTML**.
+:::
+
+## Creating Functions in R
+
+It is often good practice to define our own functions when coding. Some reasons are to:
+
+-   avoid having a bunch of repeated code (often the case if you find yourself copy/pasting the same code into separate chunks only to, say, change a small part of it);
+
+-   allow hard-coded parameters to be changed easily. (**REWORD THIS**)
+
+The general syntax for writing a function in R is:
+
+``` markdown
+your_function_name <- function(x,y,...) {
+  # Code for what the function returns
+}
+```
+
+where `x,y,...` are whatever inputs you would like your function to depend on.
+
+::: {.callout-tip collapse="true"}
+# Exercise 1
+
+Finish the code in the chunk below to create a function named `check_if_in_circle`:
+
+-   The function takes in an `x` and `y` coordinate.
+
+-   It returns `TRUE` if (x,y) is within the unit circle (i.e., the circle of radius 1 centered at the origin), and it returns `FALSE` otherwise.
+
+Note that writing `#| error: true` at the start of a code chunk tells our document to knit even if that chunk produces an error.
+
+```{r}
+#| error: true
+
+check_if_in_circle <- function(x,y) {
+    # YOUR CODE HERE
+    return(x^2 + y^2 <= 1)
+}
+
+```
+:::
+
+To verify that the `check_if_in_circle()` function is working correctly, run the following:
+
+```{r}
+# Should return TRUE
+check_if_in_circle(0, 0.99)
+# Should return TRUE
+check_if_in_circle(-0.5, 0.5)
+# Should return FALSE
+check_if_in_circle(1.1, 0.5)
+# Should return FALSE
+check_if_in_circle(0.6, -0.85)
+
+```
+
+Without doing anything different, we can notice that your code (by default!) also works when the inputs are *lists* $(x_1, \ldots, x_n)$ and $(y_1, \ldots, y_n)$ of equal size of `x` and `y` coordinates.
+
+In particular, in this case `check_if_in_circle` will return a list of *booleans* (i.e., `TRUE`/`FALSE` values), where the $i$th boolean is `TRUE` if $(x_i, y_i)$ is in the unit circle and `FALSE` otherwise.
+
+```{r}
+# List of x coordinates
+x_vec = c(0, -0.5, 1.1, 0.6) 
+# List of y coordinates
+y_vec = c(0.99, 0.5, 0.5, -0.85) #
+
+# Should return the list TRUE, TRUE, FALSE, FALSE, since
+# (0,0.99) and (-0.5, 0.5) are in the unit circle, while
+# (1.1, 0.5) and (0.6, -0.85) are not in the unit circle
+check_if_in_circle(x_vec, y_vec)
+```
+
+::: {.callout-tip collapse="true"}
+## Exercise 2
+
+Complete the function `return_color` , which:
+
+-   takes two lists `x_vec` = $(x_1, \ldots, x_n)$ and `y_vec` = $(y_1, \ldots, y_n)$ of `x` and `y` coordinates;
+
+-   returns a *list* of the same length as `x_vec` and `y_vec` where each entry is either the string "blue" or the string "red"; namely, the $i$th entry is "blue" if $(x_i, y_i)$ is in the unit circle and is "red" otherwise.
+
+```{r}
+return_color <- function(x_vec, y_vec) {
+  # YOUR CODE HERE
+  return(ifelse(check_if_in_circle(x_vec, y_vec), "blue", "red"))
+}
+```
+
+```{r}
+# Should return "blue", "blue", "red", "red"
+return_color(x_vec, y_vec)
+```
+:::
+
+## MC Simulation: Estimating the Area of a Region
+
+### Vocabulary
+
+| Every time you generate random numbers (according to some probability model/distribution), this is called *sampling* *from the distribution*
+
+For example,
+
+-   when we run `rnorm(1, mean = 0, sd = 1)` we are *sampling once from the standard normal distribution*; i.e., sampling values from $X \sim \mathcal{N}(0,1)$;
+
+-   when we run `runif(n, a, b)` we are sampling $n$ *times uniformly at random* from the interval $(a,b)$; i.e., sampling values of $X \sim U(a,b)$; this means that $X$ is equally likely to equal any value on the continuum between $a$ and $b$.
+
+::: {.callout-tip collapse="true"}
+## Exercise 3
+
+Fill in the code below to sample points within the box $[-1, 1] \times [-1, 1]$ uniformly at random.
+
+```{r}
+#| error: true
+
+# To make this code reproducible (same random number generated each time)
+set.seed(111)
+# Number of times to sample a point from the [-1,1] x [-1, 1] box
+num_points = 10000
+
+# Sample x and y from the range [-1,1] uniformly at random
+# 100000 times
+# YOUR CODE HERE
+x <- runif(num_points, -1, 1)
+y <- runif(num_points, -1, 1)
+
+# The cbind() function takes two lists (of equal length) and puts them
+# into a table, where each list is a column of that table. The c stands
+# for "column" 
+generated_data <- data.frame(cbind(x, y))
+
+```
+:::
+
+Now, when applied to a list of *booleans* (i.e., `TRUE`/`FALSE` values), the `sum()` function will add up the number of `TRUE` values in the list. We can try this out below:
+
+```{r}
+list_of_booleans = c(TRUE, FALSE, FALSE, TRUE, FALSE)
+sum(list_of_booleans)
+```
+
+::: {.callout-tip collapse="true"}
+# Exercise 4
+
+Fill in the code below to estimate the value of $\pi$ according to this MC simulation using:
+
+-   the `sum()` function
+
+-   your `check_if_in_circle()` function
+
+-   `x`, `y`, and `num_points` from two code chunks above
+
+-   the fact that the circle area = $\pi\cdot r^2$ = $\pi$ for the unit circle.
+
+```{r}
+#| error: true
+num_pts_inside = # YOUR CODE HERE
+
+pi_estimate = # YOUR CODE HERE
+  
+pi_estimate <- (sum(check_if_in_circle(x,y)) / num_points) * 4
+
+```
+
+:::
+
+If successful, we can use our function `return_color()` from before to visualize the process of marking whether points are included/excluded from the unit circle while displaying the corresponding `pi_estimate` 
+
+```{r}
+#| error: true
+
+num_pts_inside = sum(check_if_in_circle(x, y))
+
+# Plot the points
+ggplot(data = generated_data, 
+       mapping = aes(x, y, col = return_color(x, y))) + 
+  geom_point() + 
+  ggtitle(paste("Estimated value of pi:", pi_estimate)) +
+  theme(legend.position="none")
+
+```
+
+
+::: {.callout-tip collapse="true"}
+## Exercise 5
+
+Update the code from before to estimate $\pi$ based instead on the upper right quarter of the unit circle rather than the whole circle. That is, sample uniformly at random in the box $[0,1] \times [0,1]$ and consider when points land in the corresponding *quarter* of the unit circle centered at $(0,0)$.\
+
+**Hints.**
+
+-   Instead of `check_if_in_circle()`, you will need a similar function that checks for wheter input points fall in the upper right quadrant of the unit circle.
+
+-   You will need to change how `runif`() is called to select `x` and `y`
+
+-   Your final calculation of `pi_estimate` might change slightly. (Do you still multiply by 4?)
+
+```{r}
+set.seed(111)
+# Number of times to sample a point from the [0,1] x [0,1] box
+num_points = 10000
+
+# YOUR CODE HERE
+```
+
+After completing your code, include a visualization (like the one from the previous exercise) that displays how your algorithm is sampling and the $\pi$ estimate corresponding to that sampling. 
+:::
+
+::: {.callout-tip collapse="true"}
+## Exercise
+
+## Changing How Points Are Sampled
+
+```{r message = FALSE}
+#| error: true
+library(MASS)
+
+set.seed(123)
+# Step 1: Set the number of random points
+num_points <- 10000
+
+# Step 2: Generate x and y coordinates uniformly at random
+x <- rnorm(num_points, 0, .3)
+y <- rnorm(num_points, 0, .3)
+
+
+generated_data <- data.frame(cbind(x,y))
+# Check if each point falls inside the unit circle
+# inside_circle <- _______  # Complete the logical condition
+
+inside_circle <- x^2 + y^2 <= 1
+
+
+# Compute the estimate of pi
+pi_estimate <- (sum(inside_circle) / num_points) * 4
+
+
+# Plot the points
+ggplot(data = generated_data, 
+       mapping = aes(x = x, y = y, col = return_color(x,y))) + 
+  geom_point() + 
+  ggtitle(paste("Estimated value of pi:", pi_estimate) )
+
+
+
+```
+:::
+
+The *way* we generate our "random" values matters. One choice might be more appropriate than another.
+
+## Q1. Nagel-Schreckenberg (NS) Traffic Modeling
+
+::: {.callout-tip collapse="true"}
+## Q1(a) Set the initial parameters
+
+Fill in the code chunk below based on the initial parameters specified by the problem statement.
+
+```{r}
+# Initial parameters
+M     = 1000
+N     = 50
+v_max = 35
+p     = 1/3
+t_max = 1000
+```
+:::
+
+::: {.callout-tip collapse="true"}
+## Q1(b) Formula for distance between cars
+
+Find a formula for the $i$th entry $d_i$ of the list $d$ of relative positions in terms of $x_i$.
+:::
+
+### Q1(c) Distance vector
+
+A *vector* is simply another word for a list of fixed size, where the list entries are numbers.
+
+Write the vector for $\vec{d}$ in terms of the positions $x_1, \ldots, x_N$ and the parameter $M$.
+
+**Hint.** Instead of thinking about the answer in general,
+
+-   find $d_1$ in terms of $x_1, x_2, \ldots, x_N$,
+-   find $d_2$ in terms of $x_1, \ldots, x_N$,
+-   find $d_{N-1}$ in terms of $x_1, \ldots, x_N$, and finally
+-   find $d_N$ in terms of $x_1, \ldots, x_N$.
+
+$$
+\vec{d} = \begin{pmatrix} d_1 \\ d_2 \\ \vdots \\ d_N \end{pmatrix} = 
+$$
+
+Below is an outline of possible code for implementing this traffic jam simulation via Monte Carlo.
+
+\(b\) Write an expression for $\vec{d}$ = $(d_1, \ldots, d_N)$ in terms of $x_1, \ldots, x_N$.
+
+\(c\) You can search for the phrase YOUR CODE HERE in the document to ensure you found everything.
+
+```{r}
+## Purpose: Calculate the updated position and velocity for a single
+##          car after one time-step in the NS traffic model
+##
+## Inputs:
+## * M: The integer M > 1 representing the number of possible positions
+##      for a car
+## * x_i: An integer in {0,...,M-1} representing the position of the car
+## * v_i: A positive integer representing the velocity of the car
+## * d_i: An integer in {1,...,M-1} representing the distance between this
+##        (the ith) car and the car in front of it (the (i+1)st one)
+## * p: The fixed probability 0 < p < 1 of the car randomly decreasing its
+##      velocity v_i by 1 (if not stopped)
+## * v_max: The positive integer representing the speed limit, where
+##          0 <= v_i <= v_max
+##
+## Returns:
+## * A list with 2 entries, whose 1st entry is the car's future position,
+##   and whose 2nd entry is the car's future velocity 
+##
+NS_update <- function(M, x_i, v_i, d_i, p, v_max){
+  # Line (1) of Algorithm 1 in HW 1 Q1
+  v_i = min(v_i + 1, v_max)
+  # Line (2) of Algorithm 1 in HW 1 Q1
+  v_i = min(d_i - 1, v_i)
+  # Sample from a RV, called I_slow, that equals 1 with probability p
+  # and 0 with probability (1 - p)
+  I_slow = rbinom(1,1,p)
+  # Line (3) of Algorithm 1 in HW 1 Q1
+  v_i = ifelse(I_slow == 1, max(0, v_i - 1), v_i)
+  # Line (4) of Algorithm 1 in HW 1 Q1
+  x_i = (x_i + v_i) %% M
+  return(c(x_i, v_i))
+}
+```
+
+```{r}
+## Purpose: Calculate the updated positions, velocities, and relative
+##          distances between all cars after one time-step in the NS
+##          traffic model
+##
+## Inputs:
+## * M: The integer number of possible positions for a car, where M > 1
+## * N: The integer number of cars, where 0 <= N <= M
+## * p: The fixed probability 0 < p < 1 of a single car randomly
+##      decreasing its velocity by 1 (if not stopped)
+## * v_max: The positive integer speed limit
+## * x: The list of N car positions, where x_i = position of ith car.
+##      -- Assume 0 <= x_i <= M - 1 for all i = 1,...,N
+##      -- Assume the (i+1)st car is in front of the ith car
+##         for all i = 1,..,N-1
+## * v: The list of N car velocities, where v_i = velocity of ith car;
+##      assume 0 <= v_i <= v_max for all i = 1,...,N; 
+## * d: The list of distances between the cars, where d_1 is the distance
+##      between the 1st and 2nd car, d_2 is the distance between the 2nd
+##      and 3rd car,..., and d_N is the distance between the Nth and 1st
+##      car
+##
+## Returns:
+## * An N x 3 data array, whose 1st column is the list of future car 
+##   positions (x_new), whose 2nd column is the list of future car
+##   velocities (v_new), and whose 3rd column is the updated list of
+##   distances (d) between cars based on these future car positions
+run_NS_one_timestep <- function(M, N, p, v_max, x, v, d){
+  x_new = numeric(N)
+  v_new = numeric(N)
+  for(i in 1:N){
+    updated_data = NS_update(M, x[i], v[i], d[i], p, v_max)
+    x_new[i] = updated_data[1]
+    v_new[i] = updated_data[2]
+  }
+  # Update d based on x_new and v_new
+  d = (append(x_new[2:N], x_new[1]) - x_new) %% M
+  combined_data = cbind(x_new, v_new, d)
+  return(combined_data)
+}
+```
+
+```{r}
+## You do *not* need to alter this code outside of the designated portions
+## 
+## Purpose: Calculate the positions of all cars at various time steps
+##          in the NS traffic model, where the clock is started after
+##          an initial burn-in period of 2500 time steps
+## Inputs:
+## 
+## * M: The integer number of possible positions for a car, where M > 1
+## * N: The integer number of cars, where 0 <= N <= M
+## * p: The fixed probability 0 < p < 1 of a single car randomly decreasing its
+##      velocity by 1 (if not stopped)
+## * v_max: The positive integer speed limit
+## * t_max: The positive integer number of time steps for which to run the
+##          simulation after the burn-in period
+##
+## Returns:
+## 
+## A data frame with (N*t_max) rows and 2 columns such that each row is of the
+## form (Time, Position), where Time is the time step (after the burn-in period)
+## and Position is the position of one of the cars. 
+## 
+## For example, if there are N = 4 cars at positions 2, 5, 11, 1 at the first
+## t = 1st time step, the first few rows of the data frame will be
+##      Time  Positions
+##      ----------------
+##      1      2
+##      1      5
+##      1     11
+##      1      1
+## Notice that this output just takes a snapshot of *all* the car positions at
+## each time step; it doesn't keep track of an individual car's movement over
+## time. This format ends up being most compatible with plotting the final
+## image
+run_NS_simulation <- function(M, N, p, v_max, t_max){
+ # Sample the N car positions from 0,...,M-1 without replacement
+ x = sample(0:(M-1), N, replace = FALSE)
+ # Put the cars in order, so that x1 is behind x2 is behind x3 (etc.)
+ x = x[order(x)]
+ # Initializes velocities as a list of zeros
+ v = numeric(N)
+ # Create the list of initial distances
+ ## YOUR CODE HERE! 
+ d = (append(x[2:N], x[1]) - x) %% M
+ # Burn in period
+ for(t in 1:2500){
+   new_data = run_NS_one_timestep(M, N, p, v_max, x, v, d)
+   # The first column is the new x
+   x = new_data[1:N, 1]
+   v = new_data[1:N, 2]
+   d = new_data[1:N, 3]
+ }
+ # Initialize data frame of time and positions of different cars
+traffic_data = data.frame(Time = rep(1, N), Positions = x)
+ 
+ for(t in 2:t_max){
+   new_data = run_NS_one_timestep(M, N, p, v_max, x, v, d)
+   # The first column is the new x
+   x = new_data[1:N, 1]
+   v = new_data[1:N, 2]
+   d = new_data[1:N, 3]
+   
+   traffic_data = rbind(traffic_data, data.frame(Time = rep(t,N), Positions = x))
+ }
+ return(traffic_data)
+}
+
+# Execute the simulation
+traffic_data = run_NS_simulation(M, N, p, v_max, t_max)
+
+```
+
+\(b\) What assumption about the model ensures that the list of cars stays in (relative) order? That is, if that $x_i \le x_{i+1}$ for $i = 1,\ldots, N-1$ initially, how do we know that the nearest car "in front of" car $i$ will still be car $(i + 1)$?
+
+Which step of the algorithm ensures that one car cannot pass another and why?
+
+```{r}
+# Creating the flow-trace plot
+# You are *not* required to modify this code (but you're free to do so if
+# you'd like to change how the plot looks)
+
+ggplot(traffic_data, aes(x = Positions, y = Time)) +
+  geom_point(size = .1, col = "navy") +
+  labs(title = "Nagel-Schreckenberg Model: Flow Trace Plot") +
+  ylim(t_max,0) +
+  xlab("Position") +
+  ylab("Time Step") + 
+  theme_minimal()
+```
