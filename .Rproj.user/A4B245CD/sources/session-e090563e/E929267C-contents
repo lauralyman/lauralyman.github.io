@@ -77,7 +77,7 @@ To complete this exercise, your `README.md` should be pushed to Github.
 
 > INCLUDE A LINK TO YOUR GITHUB REPOSITORY WITH YOUR RENDERED README FILE HERE. FOR EXAMPLE, MINE IS [github.com/lauralyman/lauralyman.github.io](https://github.com/lauralyman/lauralyman.github.io)
 
-Of course, there are easier ways to upload a single `README` to Github without going through the three video tutorials. The _point_ of doing the process in the videos is to configure RStudio to easily push to Github to help you easily manage your portfolio website. 
+Of course, there are easier ways to upload a single `README` to Github without going through the three video tutorials. The *point* of doing the process in the videos is to configure RStudio to easily push to Github to help you easily manage your portfolio website.
 :::
 
 If at any point you run into issues, **please email me (lalyman\@mtholyoke.edu) before trying to research the problem and fix it yourself.**
@@ -88,9 +88,11 @@ If at any point you run into issues, **please email me (lalyman\@mtholyoke.edu) 
 
 It is often good practice to define our own functions when coding. Some reasons are to:
 
--   avoid having a bunch of repeated code (often the case if you find yourself copy/pasting the same code into separate chunks only to, say, change a small part of it);
+-   avoid having a bunch of repeated code (often the case if you find yourself copy/pasting the same commands into separate code chunks only to, say, change a few numbers);
 
--   allow hard-coded parameters to be changed easily. (**REWORD THIS**)
+-   improve readability (since you are organizing your logic into separate, manageable pieces);
+
+-   make debugging easier (since you can more easily isolate where an error is happening by testing each function individually).
 
 The general syntax for writing a function in R is:
 
@@ -189,7 +191,7 @@ For example,
 ::: {.callout-tip collapse="true"}
 # Exercise 4
 
-Fill in the code below to sample points within the box $[-1, 1] \times [-1, 1]$ uniformly at random. **Hint.** Look at your `NotesDay3.qmd` file (which you submitted on Moodle under _Intro to Quarto Lab_). 
+Fill in the code below to sample points within the box $[-1, 1] \times [-1, 1]$ uniformly at random. **Hint.** Look at your `NotesDay3.qmd` file (which you submitted on Moodle under *Intro to Quarto Lab*).
 
 ```{r}
 #| error: true
@@ -270,10 +272,10 @@ Estimate $\pi$ based instead on the upper right quarter of the unit circle rathe
 
 -   You will need to change how the `runif` function is called to select `x` and `y`.
 
--   Your final calculation of `pi_estimate` might change slightly. (Do you still multiply by 4?)
+-   Your final calculation of `pi_estimate` might change slightly. (Do you still multiply by 4? Why?)
 
 ```{r}
-set.seed(111)
+set.seed(123)
 # Number of times to sample a point from the [0,1] x [0,1] box
 num_points = 10000
 
