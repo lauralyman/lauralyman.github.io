@@ -1,2 +1,0 @@
-"0","# Load titanic data here"
-"0","titanic <- read_csv(""titanic.csv"")"
