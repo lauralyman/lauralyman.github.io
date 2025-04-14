@@ -1,3 +1,0 @@
-"0","bikes.sample <- bikes.pop %>%"
-"0","  # Take random sample of size 150 from bikes.pop population"
-"0","  sample_n(size = 150) "

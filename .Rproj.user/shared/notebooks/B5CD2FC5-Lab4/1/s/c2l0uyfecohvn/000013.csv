@@ -1,7 +1,0 @@
-"0","# Create a mosaic plot"
-"0","titanic %>%"
-"0","  ggplot() +"
-"0","  geom_mosaic(aes(x = product(Survived, PClass), fill = Survived)) +"
-"0","  xlab('Passenger Class') + "
-"0","  ylab('Survived? (1 for Yes, 0 for No)') +"
-"0","  scale_fill_manual('Survived?', values = c(""skyblue"", ""steelblue""))"
