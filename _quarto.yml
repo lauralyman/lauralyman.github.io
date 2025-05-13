@@ -10,14 +10,18 @@ website:
         text: Home
       - about.qmd
       - href: test.qmd
-        text: Test
-      
+        text: STAT-244SC
+        
 
 format:
   html:
-    theme: cosmo
+    theme: sandstone
     css: styles.css
     toc: true
-
+    
+    bootstrap:
+      defaults:
+        navbar-bg: green
+    
 editor: visual
 
